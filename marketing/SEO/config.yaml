@@ -1,0 +1,22 @@
+seed_keywords:
+  - "опросный лист продажи"
+  - "B2B анкета клиента"
+  - "квалификация лидов форма"
+  - "форма для клиента Bitrix24"
+  - "опросник менеджера по продажам"
+
+your_domain: "unilist.ru"
+
+apis:
+  wordstat_token: "${WORDSTAT_TOKEN}"
+  prcry_key: "${PRCRY_API_KEY}"
+  webmaster_token: "${WEBMASTER_TOKEN}"
+  webmaster_user_id: "${WEBMASTER_USER_ID}"
+  claude_api_key: "${ANTHROPIC_API_KEY}"
+
+limits:
+  wordstat_keywords_per_seed: 50
+  prcry_competitors_to_analyze: 10
+  max_pages_per_competitor: 20
+
+schedule: "sunday 09:00"
