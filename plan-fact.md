@@ -18,15 +18,21 @@
 🔲 `[Must Have]` **[todos]** Режим демо-данных: сразу после онбординга пользователь видит выгоды, особенно на тарифе AI <!--B24:14-->
 🔲 `[Must Have]` **[todos]** Проверить readiness к монетизации — что ещё не хватает для её запуска <!--B24:16-->
 
+### Безопасность
+
+🔲 `[Must Have]` **[СРОЧНО]** Ротировать скомпрометированные ключи: `ANTHROPIC_API_KEY` (console.anthropic.com → API Keys) и `TELEGRAM_BOT_TOKEN` (@BotFather → /revoke) — обновить в `.env`, Railway и Coolify <!--B24:80-->
+
+---
+
 ### Инфраструктура / 152-ФЗ
 > Детальный план: `dev/infra-plan.md`
 
 ✅ `[Must Have]` Создать VPS на Selectel (Ubuntu 22.04, 2CPU/4GB) + Object Storage для бэкапов <!--B24:18-->
-🔲 `[Must Have]` Установить Coolify, подключить GitHub (ветка `production`) <!--B24:20-->
-🔲 `[Must Have]` Поднять PostgreSQL в Coolify + авто-бэкапы → Selectel S3 <!--B24:22-->
-🔲 `[Must Have]` Перенести данные из Railway PostgreSQL <!--B24:24-->
-🔲 `[Must Have]` Настроить env variables, домены app.unilist.ru / api.unilist.ru (DNS на reg.ru) <!--B24:26-->
-🔲 `[Must Have]` Протестировать и переключить трафик <!--B24:28-->
+✅ `[Must Have]` Установить Coolify, подключить GitHub (ветка `production`) <!--B24:20-->
+✅ `[Must Have]` Поднять PostgreSQL в Coolify + авто-бэкапы → Selectel S3 <!--B24:22-->
+✅ `[Must Have]` Перенести данные из Railway PostgreSQL <!--B24:24-->
+✅ `[Must Have]` Настроить env variables, домены app.unilist.ru / api.unilist.ru (DNS на reg.ru) <!--B24:26-->
+✅ `[Must Have]` Протестировать и переключить трафик <!--B24:28-->
 ✅ `[Must Have]` **[todos]** Выбрать российский сервер под локализацию: бюджет / масштабируемость / поддержка AI / надёжность / соответствие ИБ (персданные). Бюджет — решающий фактор. <!--B24:30-->
 
 ### Аналитика
