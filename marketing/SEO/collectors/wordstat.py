@@ -1,67 +1,62 @@
 import time
-import xml.etree.ElementTree as ET
-import xml.sax.saxutils
 import requests
 
-WORDSTAT_API = "https://api.direct.yandex.ru/v4/"
+DIRECT_API = "https://api.direct.yandex.com/json/v5/"
 
 MAX_POLL_ATTEMPTS = 30
-POLL_INTERVAL = 3  # seconds
+POLL_INTERVAL = 5  # seconds
 
 
 class WordstatCollector:
     def __init__(self, token: str):
         self.token = token
-        self.base_headers = {
-            "Authorization": f"OAuth {token}",
-            "Content-Type": "text/xml; charset=utf-8",
+        self.headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json; charset=utf-8",
+            "Accept-Language": "ru",
         }
 
-    def _soap_request(self, body: str, action: str) -> ET.Element:
-        headers = {**self.base_headers, "SOAPAction": action}
-        r = requests.post(WORDSTAT_API, data=body.encode("utf-8"), headers=headers, timeout=15)
+    def _post(self, service: str, method: str, params: dict) -> dict:
+        body = {"method": method, "params": params}
+        r = requests.post(
+            DIRECT_API + service,
+            json=body,
+            headers=self.headers,
+            timeout=30,
+        )
         r.raise_for_status()
-        root = ET.fromstring(r.text)
-        ns = {"soap": "http://schemas.xmlsoap.org/soap/envelope/"}
-        return root.find(".//soap:Body", ns)[0]
+        data = r.json()
+        if "error" in data:
+            raise RuntimeError(f"Yandex API error: {data['error']}")
+        return data.get("result", data)
 
     def _create_report(self, keywords: list[str]) -> int:
-        phrases_xml = "".join(
-            f"<Item>{xml.sax.saxutils.escape(kw)}</Item>"
-            for kw in keywords
+        result = self._post(
+            "keywordsresearch",
+            "createReport",
+            {
+                "Phrases": keywords,
+                "GeoID": [225],  # Россия
+            },
         )
-        body = f"""<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <CreateNewWordstatReportRequest>
-      <Phrases>{phrases_xml}</Phrases>
-    </CreateNewWordstatReportRequest>
-  </soap:Body>
-</soap:Envelope>"""
-        response = self._soap_request(body, "CreateNewWordstatReport")
-        return int(response.find("data").text)
+        return result["ReportID"]
 
     def _get_report(self, report_id: int) -> list[dict]:
-        body = f"""<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetWordstatReportRequest>
-      <ReportID>{report_id}</ReportID>
-    </GetWordstatReportRequest>
-  </soap:Body>
-</soap:Envelope>"""
-        response = self._soap_request(body, "GetWordstatReport")
-        results = []
-        # API возвращает data=pending пока отчёт не готов
-        data_el = response.find("data")
-        if data_el is None or (data_el.text and data_el.text.strip() == "pending"):
+        result = self._post(
+            "keywordsresearch",
+            "getReport",
+            {"ReportID": report_id},
+        )
+        # Пока не готов — возвращаем пустой список
+        if result.get("Status") != "Done":
             return []
-        for item in response.findall(".//Phrases/Item"):
-            phrase = item.findtext("Phrase", "")
-            shows = int(item.findtext("Shows", "0"))
+        items = []
+        for row in result.get("SearchedWith", []):
+            phrase = row.get("Phrase", "")
+            shows = int(row.get("Shows", 0))
             if phrase:
-                results.append({"keyword": phrase, "volume": shows})
-        return results
+                items.append({"keyword": phrase, "volume": shows})
+        return items
 
     def collect(self, seed_keywords: list[str], limit: int = 50) -> list[dict]:
         """Возвращает список {"keyword": str, "volume": int}."""
@@ -72,7 +67,7 @@ class WordstatCollector:
                 for attempt in range(MAX_POLL_ATTEMPTS):
                     time.sleep(POLL_INTERVAL)
                     data = self._get_report(report_id)
-                    if data:  # report is ready
+                    if data:
                         results.extend(data[:limit])
                         break
                 else:
