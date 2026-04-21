@@ -10,10 +10,12 @@
 - `ai-architecture/`  — архитектура AI, выбор моделей, лимиты, стандарты
 - `content/`          — статьи, материалы, контент-план
 - `legal/`            — юридическая база, документы, compliance
-
-## При старте каждой сессии
-
-Вызови `bitrix24_sync_md_file` с `filePath=/Users/shuvaev/Продукты/unilist/saas-workspace/plan-fact.md` — синхронизировать статусы задач из Битрикса в план. Сообщи что изменилось (или "всё актуально").
+- `Product/`          — продуктовые артефакты, фичи
+- `tracking/`         — трекшн-карта (`traction-map.md`), интервью (`interviews.md`)
+- `product_process/`  — процессы: биллинг, PostHog, триггерные письма
+- `Strategy/`         — стратегические материалы
+- `Nalog/`            — налоговая конфигурация ИП (УСН 1% Пермский край, ОКВЭД 62.01) + `tax-calendar-2026.md`
+- `tools/`            — скрипты для внешних сервисов (Reg.ru API и т.п.). Секреты — в `.secrets/` (gitignored)
 
 ## Обязательные правила при каждой задаче
 
@@ -27,6 +29,11 @@
    git add -A && git commit -m "<краткое описание>" && git push
    ```
 5. **Всегда сообщай** что обновил в конце ответа
+
+## Важные ограничения
+
+- **`plan-fact.md`** — редактируется вручную (галочки `- [ ]` / `- [/]` / `- [x]`). Битрикс24-синхронизация отключена.
+- **Источник правды об инфраструктуре** — `PROGRESS.md` в `../dev_unilist/`, а не `plan-fact.md`
 
 ## Матрица зависимостей между доменами
 
@@ -51,3 +58,18 @@
   - `production` → Coolify на Selectel (prod, автодеплой через GitHub webhook)
 - **Релизный флоу:** `git merge main production && git push origin production`
 - **Детальный план миграции:** `dev/infra-plan.md`
+
+## Домены и DNS
+
+- 6 доменов в Reg.ru (список: `dev/domains.md`, генерируется `tools/reg-ru/inventory.py`).
+- `unilist.ru` — основной, истекает **2026-06-13** (событие в Google Calendar на 30.05).
+- `uni-list.ru`, `try-unilist.ru` — **Respondo-спутники** под cold email. `unilist.ru` под outreach НЕ используется.
+- Управление DNS: `tools/reg-ru/dns.py` (list/add-a/add-mx/add-txt/remove/apply-email). VK WorkSpace DNS-pack: `tools/reg-ru/setup-vk.py`.
+- Креды Reg.ru — `.secrets/regru.env` (gitignored). IP в whitelist Reg.ru.
+
+## Интеграции
+
+- **Google Calendar/Gmail/Drive** — MCP-коннекторы Claude подключены к `dmitry.shuvaev@gmail.com`. Default notifications 7d/2d/1d/0d для all-day events настроены. Для платежей/продлений создавай all-day события — напоминания прилетят автоматически.
+- **Reg.ru** — REST API, `tools/reg-ru/`.
+- **Respondo** — публичный API ограничен `POST /add-contact`. Статусы ящиков/прогрева/статистика — только UI или Playwright. Ключ в `.secrets/respondo.env`.
+- **Bitrix24** — MCP-сервер (см. команды `bitrix24_*`), sync plan-fact.md при старте сессии.
