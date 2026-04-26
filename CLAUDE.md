@@ -15,6 +15,7 @@
 - `product_process/`  — процессы: биллинг, PostHog, триггерные письма
 - `Strategy/`         — стратегические материалы
 - `Nalog/`            — налоговая конфигурация ИП (УСН 1% Пермский край, ОКВЭД 62.01) + `tax-calendar-2026.md`
+- `referral/`         — реферальная программа: дизайн, экономика, manual playbook. Phase 1 (manual, вариант A) запущена 2026-04-26; Phase 2 (automated, B через credit ledger) — после ≥10 рефералов из Phase 1 или ≥20 платящих
 - `tools/`            — скрипты для внешних сервисов (Reg.ru API и т.п.). Секреты — в `.secrets/` (gitignored)
 
 ## Обязательные правила при каждой задаче
@@ -44,6 +45,7 @@
 | dev | finance, ai-architecture | Инфраструктурные затраты, статистика использования AI |
 | marketing | content | Гипотезы каналов → темы статей |
 | content | marketing | Опубликованные статьи → эффективность каналов |
+| referral | finance, marketing, dev | Forgone revenue → unit-econ; оффер → продажи/onboarding; Phase 2 → credit ledger в продукте |
 
 ## Как работать с кодовой базой
 Код находится в `/Users/shuvaev/Продукты/unilist/dev_unilist/`. Открывай его отдельным окном Claude Code. Если нужен кросс-доменный контекст во время разработки — попроси прочитать `../saas-workspace/CENTRAL_STATE.md`.
