@@ -60,6 +60,7 @@
   - `production` → Coolify на Selectel (prod, автодеплой через GitHub webhook)
 - **Релизный флоу:** `git merge main production && git push origin production`
 - **Детальный план миграции:** `dev/infra-plan.md`
+- **Coolify API:** креды `.secrets/coolify.env`. UUID ресурсов и существующих Applications — в `../dev_unilist/CLAUDE.md` (раздел «Coolify API»). При создании нового приватного репо — выдать GitHub App `super-shrike-...` доступ: https://github.com/settings/installations.
 
 ## Домены и DNS
 
@@ -75,3 +76,4 @@
 - **Reg.ru** — REST API, `tools/reg-ru/`.
 - **Respondo** — публичный API ограничен `POST /add-contact`. Статусы ящиков/прогрева/статистика — только UI или Playwright. Ключ в `.secrets/respondo.env`.
 - **Bitrix24** — MCP-сервер (см. команды `bitrix24_*`), sync plan-fact.md при старте сессии.
+- **Coolify** — REST API, `.secrets/coolify.env` (`COOLIFY_URL=http://193.168.136.29:8000`). Подробности и UUID — в `../dev_unilist/CLAUDE.md`.
