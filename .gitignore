@@ -2,5 +2,6 @@
 *.tmp
 .DS_Store
 .secrets/
+marketing/landing/landing_dev/
 __pycache__/
 *.pyc
