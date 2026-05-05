@@ -3,6 +3,39 @@
 > Каждая запись: что изменилось, в каком домене, что нужно сделать в других доменах.
 > Формат: `[домен-источник → домен-получатель]`
 
+## 2026-05-03 — Landing: раздельный деплой staging/prod + блок «Знакомо?» + Я.Метрика цели
+
+### [marketing/landing → dev, analytics]
+
+**Что сделано:**
+1. **Раздельный деплой `website_dev` через Coolify:**
+   - `dev` → `lp.unilist.ru` (staging, noindex). UUID `gfubqn2hodbpezv5rx68fg5g`.
+   - `main` → `unilist.ru` (prod). UUID `qv3mhlmk7b8eov7ge9u5myn3`.
+   - Флоу: push в `dev` → автодеплой staging → merge в `main` → автодеплой prod.
+2. **Возвращена секция «Знакомо?» (Familiar)** на главную — перед Bento. Компонент: `website_dev/src/components/sections/familiar.tsx`. Референс: Framer `framer-1fwyraz`. Выкачено на оба окружения.
+3. **Каталог целей Я.Метрики** (счётчик 97774201) создан через API: 54 цели, скрипт `tools/yandex-metrika/create-goals.py`, конфиг `goals.json`. Источник правды по именам и точкам вставки `ym(...)` — `marketing/analytics/yandex-metrika-events.md`.
+
+**Что нужно:**
+- При добавлении новой секции с CTA: событие в `yandex-metrika-events.md` → цель в `goals.json` → запуск `create-goals.py` (идемпотентен).
+- Без проверки на staging не пушим в `main` (= unilist.ru prod).
+
+Детали: `marketing/landing/CLAUDE.md`, `marketing/landing/MEMORY.md`.
+
+## 2026-05-03 — QR/СБП отклонён как основной платёжный способ
+
+### [finance → dev, marketing]
+
+**Решение:** карточный интернет-эквайринг Модульбанка — основа подписки. QR/СБП — только для разовых операций (AI-кредиты, апгрейды, ручная оплата).
+
+**Причина:** QR/СБП по https://modulbank.ru/qr-pay/ не поддерживает рекуррент. Для подписки 4 990₽/мес = ручная оплата каждый месяц → недопустимый churn для B2B.
+
+**Что нужно:**
+- `dev`: при проектировании биллинга — карточный шлюз как primary, QR/СБП как secondary (разовые платежи).
+- `finance`: эквайринг 2,49% в юнит-экономике остаётся; ставку требуется подтвердить официальным тарифом интернет-эквайринга (в PDF Авенпоста только оффлайн-оборудование).
+- `marketing`: на pricing-странице не обещать «оплата по QR» как способ оформления подписки.
+
+Детали: `finance/pricing.md`.
+
 ## 2026-04-26 — Referral: разделение на Phase 1 (manual) + Phase 2 (automated)
 
 ### [referral → marketing, gtm, finance]
