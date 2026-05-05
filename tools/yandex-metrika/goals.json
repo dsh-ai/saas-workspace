@@ -1,0 +1,67 @@
+[
+  {"name": "Hero — pill register",                 "type": "action", "conditions": [{"type": "exact", "url": "hero_pill_register"}]},
+  {"name": "Hero — pill changelog",                "type": "action", "conditions": [{"type": "exact", "url": "hero_pill_changelog"}]},
+  {"name": "Hero CTA — регистрация",               "type": "action", "conditions": [{"type": "exact", "url": "cta_register_hero"}]},
+  {"name": "Hero CTA — демо",                      "type": "action", "conditions": [{"type": "exact", "url": "cta_demo_hero"}]},
+
+  {"name": "Navbar — логотип",                     "type": "action", "conditions": [{"type": "exact", "url": "nav_logo_home"}]},
+  {"name": "Navbar — Возможности",                 "type": "action", "conditions": [{"type": "exact", "url": "nav_anchor_features"}]},
+  {"name": "Navbar — Как работает",                "type": "action", "conditions": [{"type": "exact", "url": "nav_anchor_how"}]},
+  {"name": "Navbar — Тарифы",                      "type": "action", "conditions": [{"type": "exact", "url": "nav_anchor_pricing"}]},
+  {"name": "Navbar — FAQ",                         "type": "action", "conditions": [{"type": "exact", "url": "nav_anchor_faq"}]},
+  {"name": "Navbar — Блог",                        "type": "action", "conditions": [{"type": "exact", "url": "nav_open_blog"}]},
+  {"name": "Navbar — Войти",                       "type": "action", "conditions": [{"type": "exact", "url": "cta_login_navbar"}]},
+  {"name": "Navbar CTA — регистрация",             "type": "action", "conditions": [{"type": "exact", "url": "cta_register_navbar"}]},
+  {"name": "Mobile menu — открытие/закрытие",      "type": "action", "conditions": [{"type": "exact", "url": "mobile_menu_toggle"}]},
+  {"name": "Mobile menu — CTA регистрация",        "type": "action", "conditions": [{"type": "exact", "url": "cta_register_mobile_menu"}]},
+
+  {"name": "Footer — Возможности",                 "type": "action", "conditions": [{"type": "exact", "url": "footer_link_features"}]},
+  {"name": "Footer — Как работает",                "type": "action", "conditions": [{"type": "exact", "url": "footer_link_how"}]},
+  {"name": "Footer — Тарифы",                      "type": "action", "conditions": [{"type": "exact", "url": "footer_link_pricing"}]},
+  {"name": "Footer — FAQ",                         "type": "action", "conditions": [{"type": "exact", "url": "footer_link_faq"}]},
+  {"name": "Footer — Блог",                        "type": "action", "conditions": [{"type": "exact", "url": "footer_link_blog"}]},
+  {"name": "Footer — Telegram",                    "type": "action", "conditions": [{"type": "exact", "url": "footer_link_telegram"}]},
+  {"name": "Footer — Email",                       "type": "action", "conditions": [{"type": "exact", "url": "footer_link_email"}]},
+  {"name": "Footer — Оферта",                      "type": "action", "conditions": [{"type": "exact", "url": "footer_link_legal_offer"}]},
+  {"name": "Footer — Политика",                    "type": "action", "conditions": [{"type": "exact", "url": "footer_link_legal_privacy"}]},
+  {"name": "Footer — ПДн",                         "type": "action", "conditions": [{"type": "exact", "url": "footer_link_legal_pdn"}]},
+  {"name": "Footer CTA — регистрация",             "type": "action", "conditions": [{"type": "exact", "url": "cta_register_footer"}]},
+
+  {"name": "Sticky CTA — регистрация (mobile)",    "type": "action", "conditions": [{"type": "exact", "url": "cta_register_sticky"}]},
+
+  {"name": "Familiar (Знакомо?) — регистрация",    "type": "action", "conditions": [{"type": "exact", "url": "cta_register_familiar"}]},
+
+  {"name": "Pricing — переключение Monthly",       "type": "action", "conditions": [{"type": "exact", "url": "pricing_toggle_monthly"}]},
+  {"name": "Pricing — переключение Yearly",        "type": "action", "conditions": [{"type": "exact", "url": "pricing_toggle_yearly"}]},
+  {"name": "Pricing — Trial регистрация",          "type": "action", "conditions": [{"type": "exact", "url": "cta_register_pricing_trial"}]},
+  {"name": "Pricing — Базовый регистрация",        "type": "action", "conditions": [{"type": "exact", "url": "cta_register_pricing_base"}]},
+  {"name": "Pricing — AI регистрация",             "type": "action", "conditions": [{"type": "exact", "url": "cta_register_pricing_ai"}]},
+
+  {"name": "FAQ — открытие вопроса",               "type": "action", "conditions": [{"type": "exact", "url": "faq_open_question"}]},
+  {"name": "FAQ — Telegram",                       "type": "action", "conditions": [{"type": "exact", "url": "cta_telegram_faq"}]},
+
+  {"name": "Integrations — запрос интеграции",     "type": "action", "conditions": [{"type": "exact", "url": "integrations_request"}]},
+  {"name": "Integrations — клик карточки",         "type": "action", "conditions": [{"type": "exact", "url": "integrations_card_click"}]},
+
+  {"name": "Blog — открытие статьи (индекс)",      "type": "action", "conditions": [{"type": "exact", "url": "blog_article_open"}]},
+  {"name": "Blog — статья из ленты на главной",    "type": "action", "conditions": [{"type": "exact", "url": "blog_strip_article"}]},
+  {"name": "Blog — все статьи (лента главной)",    "type": "action", "conditions": [{"type": "exact", "url": "blog_strip_all"}]},
+  {"name": "Blog — назад к индексу",               "type": "action", "conditions": [{"type": "exact", "url": "blog_back_to_index"}]},
+  {"name": "Blog — клик по источнику",             "type": "action", "conditions": [{"type": "exact", "url": "blog_source_click"}]},
+  {"name": "Blog — CTA регистрация (статья)",      "type": "action", "conditions": [{"type": "exact", "url": "cta_register_article"}]},
+  {"name": "Blog — CTA Telegram (статья)",         "type": "action", "conditions": [{"type": "exact", "url": "cta_telegram_article"}]},
+  {"name": "Blog — скролл статьи 25%",             "type": "action", "conditions": [{"type": "exact", "url": "article_scroll_25"}]},
+  {"name": "Blog — скролл статьи 50%",             "type": "action", "conditions": [{"type": "exact", "url": "article_scroll_50"}]},
+  {"name": "Blog — скролл статьи 75%",             "type": "action", "conditions": [{"type": "exact", "url": "article_scroll_75"}]},
+  {"name": "Blog — скролл статьи 100%",            "type": "action", "conditions": [{"type": "exact", "url": "article_scroll_100"}]},
+
+  {"name": "Final CTA — регистрация",              "type": "action", "conditions": [{"type": "exact", "url": "cta_register_final"}]},
+  {"name": "Final CTA — Telegram",                 "type": "action", "conditions": [{"type": "exact", "url": "cta_telegram_final"}]},
+  {"name": "How — демо-видео",                     "type": "action", "conditions": [{"type": "exact", "url": "how_demo_video"}]},
+
+  {"name": "Главная — скролл 50%",                 "type": "action", "conditions": [{"type": "exact", "url": "scroll_depth_50"}]},
+  {"name": "Главная — скролл 75%",                 "type": "action", "conditions": [{"type": "exact", "url": "scroll_depth_75"}]},
+  {"name": "Главная — скролл 100%",                "type": "action", "conditions": [{"type": "exact", "url": "scroll_depth_100"}]},
+  {"name": "Главная — 30 сек на странице",         "type": "action", "conditions": [{"type": "exact", "url": "time_on_page_30s"}]},
+  {"name": "Главная — 60 сек на странице",         "type": "action", "conditions": [{"type": "exact", "url": "time_on_page_60s"}]}
+]
