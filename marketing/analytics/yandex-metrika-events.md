@@ -422,6 +422,25 @@ export function ArticleScrollDepth({ slug }: { slug: string }) {
 
 ---
 
+## 12.1. События продукта (dev_unilist/frontend)
+
+Тот же счётчик `97774201`. Префикс `app_` отделяет события продукта от лендинга. Идентификация пользователя — `ym(id, 'setUserID', user.id)` + `userParams({plan, company, industry})` в `auth-provider.tsx` (login / register / restore-session). SPA-навигация трекается через `YandexMetrikaProvider` (manual `hit` на смену `pathname`/`searchParams`).
+
+| goal_id | Goal ID Метрики | Где вызывается | Параметры |
+|---|---|---|---|
+| `app_signup_completed` | 558339465 | `auth-provider.tsx` → `register()` после успеха | `{plan}` |
+| `app_login_completed` | 558339466 | `auth-provider.tsx` → `login()` после успеха | — |
+| `app_form_created` | 558339467 | `dashboard/surveys/create/page.tsx` после `POST /surveys` | `{bitrix_bound: 'yes'\|'no'}` |
+| `app_paywall_view` | 558339468 | `dashboard/billing/page.tsx` — `useEffect` на mount | — |
+| `app_paywall_cta_click` | 558339469 | `dashboard/billing/page.tsx` → `handleCheckout()` | `{priceId, currentPlan}` |
+| `app_subscription_started` | 558339471 | `dashboard/billing/page.tsx` при `?status=success` | `{plan}` |
+
+**Файлы инфраструктуры:**
+- `frontend/lib/yandex-metrika.ts` — `YM_ID`, `track()`, `trackParams()`, `trackHit()`, `setUserId()`, `setUserParams()`
+- `frontend/components/providers/yandex-metrika-provider.tsx` — init + SPA hit-трекинг
+
+---
+
 ## 13. Чеклист внедрения
 
 - [ ] Получить `COUNTER_ID` в Яндекс Метрике (https://metrika.yandex.ru)

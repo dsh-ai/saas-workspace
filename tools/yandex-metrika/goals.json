@@ -63,5 +63,12 @@
   {"name": "Главная — скролл 75%",                 "type": "action", "conditions": [{"type": "exact", "url": "scroll_depth_75"}]},
   {"name": "Главная — скролл 100%",                "type": "action", "conditions": [{"type": "exact", "url": "scroll_depth_100"}]},
   {"name": "Главная — 30 сек на странице",         "type": "action", "conditions": [{"type": "exact", "url": "time_on_page_30s"}]},
-  {"name": "Главная — 60 сек на странице",         "type": "action", "conditions": [{"type": "exact", "url": "time_on_page_60s"}]}
+  {"name": "Главная — 60 сек на странице",         "type": "action", "conditions": [{"type": "exact", "url": "time_on_page_60s"}]},
+
+  {"name": "Продукт — регистрация завершена",       "type": "action", "conditions": [{"type": "exact", "url": "app_signup_completed"}]},
+  {"name": "Продукт — логин завершён",              "type": "action", "conditions": [{"type": "exact", "url": "app_login_completed"}]},
+  {"name": "Продукт — форма создана",               "type": "action", "conditions": [{"type": "exact", "url": "app_form_created"}]},
+  {"name": "Продукт — paywall просмотр",            "type": "action", "conditions": [{"type": "exact", "url": "app_paywall_view"}]},
+  {"name": "Продукт — paywall клик CTA",            "type": "action", "conditions": [{"type": "exact", "url": "app_paywall_cta_click"}]},
+  {"name": "Продукт — подписка оформлена",          "type": "action", "conditions": [{"type": "exact", "url": "app_subscription_started"}]}
 ]

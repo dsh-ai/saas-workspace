@@ -52,7 +52,9 @@
 
 ## Инфраструктура (production)
 
-- **VPS:** Selectel, Ubuntu 22.04, Shared 2vCPU/4GB/50GB — IP `193.168.136.29`
+- **VPS:** Selectel, Ubuntu 22.04, Shared 2vCPU/4GB/50GB — IP `193.168.136.29`, hostname `kinsey`
+- **SSH:** `ssh -i ~/.ssh/id_ed25519 root@193.168.136.29`. Публичный ключ в `/root/.ssh/authorized_keys`. Если доступ внезапно пропал — добавить ключ через Selectel-консоль VPS (root). **Не путать** с VPS Sentry/GlitchTip `37.9.7.141` (hostname `tessa-sentry`, `/opt/glitchtip/`).
+- **Swap:** `/swapfile` 4 GB, прописан в `/etc/fstab` (добавлен 2026-05-10 — без него `npm ci` бэка падал OOM при сборке в Coolify).
 - **Деплой:** Coolify v4 на VPS — UI доступен на `http://193.168.136.29:8000`
 - **S3 бэкапы:** Selectel Object Storage, бакет `unilist-backups`, endpoint `s3.ru-7.storage.selcloud.ru`
 - **Ветки:**
@@ -77,3 +79,10 @@
 - **Respondo** — публичный API ограничен `POST /add-contact`. Статусы ящиков/прогрева/статистика — только UI или Playwright. Ключ в `.secrets/respondo.env`.
 - **Bitrix24** — MCP-сервер (см. команды `bitrix24_*`), sync plan-fact.md при старте сессии.
 - **Coolify** — REST API, `.secrets/coolify.env` (`COOLIFY_URL=http://193.168.136.29:8000`). Подробности и UUID — в `../dev_unilist/CLAUDE.md`.
+- **Яндекс.Метрика** — счётчик `97774201`, OAuth-токен в `.secrets/yandex-metrika.env` (права `metrika:write`). Управление целями: `tools/yandex-metrika/create-goals.py` + `goals.json` (идемпотентно). Каталог событий лендинга: `marketing/analytics/yandex-metrika-events.md`.
+
+## Landing — деплой website_dev
+
+- `dev` ветка → `lp.unilist.ru` (staging, noindex), Coolify UUID `gfubqn2hodbpezv5rx68fg5g`.
+- `main` ветка → `unilist.ru` (prod), Coolify UUID `qv3mhlmk7b8eov7ge9u5myn3`.
+- Флоу: коммит в `dev` → проверка на staging → `git checkout main && git merge dev && git push` → автодеплой prod.
