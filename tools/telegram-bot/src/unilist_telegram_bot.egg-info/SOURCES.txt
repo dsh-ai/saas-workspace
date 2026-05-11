@@ -1,0 +1,9 @@
+pyproject.toml
+src/__init__.py
+src/config.py
+src/unilist_telegram_bot.egg-info/PKG-INFO
+src/unilist_telegram_bot.egg-info/SOURCES.txt
+src/unilist_telegram_bot.egg-info/dependency_links.txt
+src/unilist_telegram_bot.egg-info/entry_points.txt
+src/unilist_telegram_bot.egg-info/requires.txt
+src/unilist_telegram_bot.egg-info/top_level.txt
