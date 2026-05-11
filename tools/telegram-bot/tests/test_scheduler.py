@@ -72,3 +72,85 @@ async def test_scan_drafts_skips_invalid(tmp_path, state, caplog):
 async def test_scan_drafts_missing_dir_returns_zero(tmp_path, state):
     cfg = _FakeCfg(tmp_path / "nonexistent")
     assert await scan_drafts(cfg, state) == 0
+
+
+from datetime import timedelta
+from src.scheduler import trigger_publishes
+
+UTC = timezone.utc
+
+
+class _FakeMessage:
+    def __init__(self, message_id): self.message_id = message_id
+
+
+class _FakeBot:
+    def __init__(self):
+        self.calls = []
+        self._counter = 1000
+
+    async def send_message(self, chat_id, text, **kwargs):
+        self.calls.append({"chat_id": chat_id, "text": text})
+        self._counter += 1
+        return _FakeMessage(self._counter)
+
+
+class _FakeApp:
+    def __init__(self):
+        self.bot = _FakeBot()
+
+
+class _FakeCfg2:
+    def __init__(self, posts_root: Path):
+        self.POSTS_ROOT = posts_root
+        self.CHANNEL_ID = -1003253037787
+        self.ADMIN_USER_ID = 31057348
+
+    @property
+    def drafts_dir(self): return self.POSTS_ROOT / "drafts"
+    @property
+    def published_dir(self): return self.POSTS_ROOT / "published"
+
+
+async def test_trigger_publishes_moves_file_and_updates_state(tmp_path, state):
+    posts_root = tmp_path / "posts"
+    drafts = posts_root / "drafts"
+    drafts.mkdir(parents=True)
+    write_draft(drafts, "post-1", publish_at="2026-05-12T10:00:00+00:00")
+    cfg = _FakeCfg2(posts_root)
+
+    # Register + approve
+    await state.register("post-1", datetime(2026, 5, 12, 10, tzinfo=UTC))
+    await state.set_status("post-1", PostStatus.APPROVED)
+
+    app = _FakeApp()
+    now = datetime(2026, 5, 12, 10, 0, 1, tzinfo=UTC)
+    sent = await trigger_publishes(app, cfg, state, now)
+
+    assert sent == 1
+    # Two sends: one to channel, one DM to admin
+    assert len(app.bot.calls) == 2
+    chat_ids = {c["chat_id"] for c in app.bot.calls}
+    assert cfg.CHANNEL_ID in chat_ids
+    assert cfg.ADMIN_USER_ID in chat_ids
+    # File moved
+    assert not (drafts / "post-1.md").exists()
+    assert (posts_root / "published" / "post-1.md").exists()
+    # State updated
+    row = await state.get("post-1")
+    assert row["status"] == PostStatus.PUBLISHED
+    assert row["channel_message_id"] is not None
+
+
+async def test_trigger_publishes_skips_unapproved(tmp_path, state):
+    posts_root = tmp_path / "posts"
+    drafts = posts_root / "drafts"
+    drafts.mkdir(parents=True)
+    write_draft(drafts, "post-1")
+    cfg = _FakeCfg2(posts_root)
+    await state.register("post-1", datetime(2026, 5, 12, 10, tzinfo=UTC))
+    # still DRAFT
+    app = _FakeApp()
+    sent = await trigger_publishes(app, cfg, state, datetime(2026, 5, 12, 11, tzinfo=UTC))
+    assert sent == 0
+    assert (drafts / "post-1.md").exists()  # not moved

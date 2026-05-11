@@ -94,8 +94,22 @@ async def trigger_escalations(app: Application, cfg: Config, state: State, now: 
 
 
 async def trigger_publishes(app: Application, cfg: Config, state: State, now: datetime) -> int:
-    """Stub — real implementation in Task 7."""
-    return 0
+    """Publish APPROVED posts whose publish_at has arrived."""
+    from src.publisher import publish_post  # local import to avoid cycles
+    due = await state.list_due_for_publish(now=now)
+    sent = 0
+    for row in due:
+        path = cfg.drafts_dir / f"{row['id']}.md"
+        if not path.exists():
+            log.error("approved post file missing: %s", row["id"])
+            continue
+        try:
+            post = Post.from_file(path)
+            await publish_post(app, cfg, state, post)
+            sent += 1
+        except Exception:
+            log.exception("publish failed for %s", row["id"])
+    return sent
 
 
 async def run_scheduler(app: Application, cfg: Config, state: State) -> None:
