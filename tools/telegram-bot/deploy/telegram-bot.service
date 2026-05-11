@@ -1,0 +1,19 @@
+[Unit]
+Description=Unilist Telegram Approval Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=unilist
+Group=unilist
+WorkingDirectory=/opt/unilist-bot/app
+EnvironmentFile=/opt/unilist-bot/.env
+ExecStart=/opt/unilist-bot/app/.venv/bin/python -m src run
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
