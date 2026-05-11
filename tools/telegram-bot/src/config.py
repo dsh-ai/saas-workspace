@@ -16,6 +16,7 @@ class Config:
     CHANNEL_ID: int = int(os.environ["TELEGRAM_CHANNEL_ID"])
     POSTS_ROOT: Path = Path(os.environ["POSTS_ROOT"])
     STATE_DB: Path = Path(os.environ["STATE_DB"])
+    RAW_INBOX: Path = Path(os.environ.get("RAW_INBOX", str(Path(os.environ["POSTS_ROOT"]).parent / "raw-inbox")))
     TZ: str = os.environ.get("TZ", "Europe/Moscow")
 
     @property

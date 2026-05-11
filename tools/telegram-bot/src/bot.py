@@ -2,8 +2,12 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timedelta
 from functools import wraps
+import pytz
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import (
+    Application, CommandHandler, CallbackQueryHandler,
+    MessageHandler, filters, ContextTypes,
+)
 
 from src.config import Config
 from src.post import Post
@@ -116,9 +120,50 @@ async def on_button(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         log.warning("unknown action: %s", action)
 
 
+@admin_only
+async def on_voice(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
+    """Save incoming voice message as OGG in raw-inbox/."""
+    voice = update.message.voice
+    if voice is None:
+        return
+    cfg.RAW_INBOX.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(pytz.timezone(cfg.TZ)).strftime("%Y-%m-%d-%H%M%S")
+    filename = f"{ts}-voice.ogg"
+    target = cfg.RAW_INBOX / filename
+    tg_file = await voice.get_file()
+    await tg_file.download_to_drive(target)
+    log.info("saved voice: %s (%ss)", filename, voice.duration)
+    await update.message.reply_text(
+        f"🎙 Голосовое записано: `{filename}` ({voice.duration}с)\n"
+        f"Расшифруй (в TG встроено) и пришли текст следующим сообщением — "
+        f"бот запишет к этой записи.",
+        parse_mode="Markdown",
+    )
+
+
+@admin_only
+async def on_text(update: Update, _ctx: ContextTypes.DEFAULT_TYPE):
+    """Save any non-command text from admin as a markdown note in raw-inbox/."""
+    msg = update.message
+    if msg is None or not msg.text or msg.text.startswith("/"):
+        return
+    cfg.RAW_INBOX.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(pytz.timezone(cfg.TZ)).strftime("%Y-%m-%d-%H%M%S")
+    filename = f"{ts}-note.md"
+    target = cfg.RAW_INBOX / filename
+    target.write_text(f"# {ts}\n\n{msg.text}\n", encoding="utf-8")
+    log.info("saved note: %s (%d chars)", filename, len(msg.text))
+    await msg.reply_text(
+        f"📝 Заметка записана: `{filename}` ({len(msg.text)} символов)",
+        parse_mode="Markdown",
+    )
+
+
 def build_app() -> Application:
     app = Application.builder().token(cfg.BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("pending", cmd_pending))
     app.add_handler(CallbackQueryHandler(on_button))
+    app.add_handler(MessageHandler(filters.VOICE, on_voice))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     return app

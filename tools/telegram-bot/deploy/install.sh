@@ -48,6 +48,7 @@ TMP_ENV=$(mktemp)
 trap "rm -f $TMP_ENV" EXIT
 sed -e 's|^POSTS_ROOT=.*|POSTS_ROOT=/opt/unilist-bot/posts|' \
     -e 's|^STATE_DB=.*|STATE_DB=/opt/unilist-bot/state.db|' \
+    -e 's|^RAW_INBOX=.*|RAW_INBOX=/opt/unilist-bot/raw-inbox|' \
     "$LOCAL_SECRETS" > "$TMP_ENV"
 $SCP "$TMP_ENV" "$VPS:/opt/unilist-bot/.env"
 $SSH "chown unilist:unilist /opt/unilist-bot/.env && chmod 600 /opt/unilist-bot/.env"
