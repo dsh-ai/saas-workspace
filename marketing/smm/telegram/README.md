@@ -42,12 +42,15 @@
 `@unilist_post_bot` — полу-автоматический бот публикации с inline-кнопками. В production на VPS Selectel (`kinsey`, 193.168.136.29), systemd unit `telegram-bot`. E2E приёмка пройдена 2026-05-11.
 
 **Workflow:**
-1. Claude пишет markdown в `posts/drafts/`
-2. `git push` → VPS-cron каждые 5 мин подтягивает
-3. Бот шлёт владельцу approve-карточку за 24ч до `publish_at`
-4. На Approve — публикует в канал в момент `publish_at`
+1. **Сырьё** — ты надиктовываешь голосовое или пишешь текст в `@unilist_post_bot` → бот сохраняет в `/opt/unilist-bot/raw-inbox/` на VPS.
+2. **Обработка** — в Claude Code сессии «обработай инбокс» → Claude SSH-ит, читает ноты, оформляет в пост-формат БЕЗ выдумывания фактов, показывает тебе.
+3. **Push** — после твоего ОК Claude кладёт markdown в `posts/drafts/`, `git push`.
+4. **Approve** — VPS-cron каждые 5 мин подтягивает; за 24ч до `publish_at` бот шлёт тебе approve-карточку с тремя кнопками (Approve / Reject / Snooze 24h).
+5. **Publish** — на Approve бот публикует в канал в момент `publish_at`.
 
-Подробности в `CLAUDE.md` (раздел «Генерация постов для бота»). Код: `../../../tools/telegram-bot/`.
+⚠️ **Не давай Claude генерить посты «из головы»** — будет AI-копирайтерский синтетический тон. Только обработка твоего сырья. Подробности — `CLAUDE.md` («Жёсткое правило»).
+
+Код: `../../../tools/telegram-bot/`.
 
 ## Связанные домены
 
