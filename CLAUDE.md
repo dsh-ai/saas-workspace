@@ -36,6 +36,17 @@
 - **`plan-fact.md`** — редактируется вручную (галочки `- [ ]` / `- [/]` / `- [x]`). Битрикс24-синхронизация отключена.
 - **Источник правды об инфраструктуре** — `PROGRESS.md` в `../dev_unilist/`, а не `plan-fact.md`
 
+## Разбор интервью с РОПами (кастдев)
+
+Когда пользователь приносит диалоги с РОПами (файлом в `tracking/interviews/`, вставкой в чат или расшифровкой голоса):
+
+1. **Сырьё** — в `tracking/interviews/ГГГГ-ММ-ДД-rop-<кто>.md` (дословно, не пересказ). **Сводка/скоринг** — в `tracking/interviews.md`. Гайд вопросов — `tracking/interview-guide.md`. Стратегические выкладки — `Strategy/gtm-plg-strategy.md`.
+2. **Скоринг по критерию трекшн-карты:** проблема подтверждена, если **3 из 5** интервью — РОП называет ущерб **в цифрах** И **сам**, без наводки, описывает сценарий.
+3. **Проверь на «отравленность»:** если в диалоге основатель сам произнёс решение (алерт/уведомление при открытии/видеть путь заполнения/на каком вопросе отвалился) — интервью **не считается**, скоринг по нему обнуляется.
+4. **Скори по формулировкам РОПа, не по пересказу основателя.** Пересказ скорить нельзя — проси дословные цитаты.
+5. **Вытаскивай ответы на открытые вопросы** из `Strategy/gtm-plg-strategy.md`: какой уровень (L1/L2/L3) болит сам, реакция realtime/пачкой, цифра ущерба в рублях/мес (потолок цены), как сегмент покупает инструменты (→ PLG возможен да/нет), объём опросников/мес.
+6. **После разбора** обнови: `tracking/interviews.md` (сводка), `tracking/traction-map.md` (лог + статус красной ячейки), при сдвиге выводов — `Strategy/gtm-plg-strategy.md` и `CENTRAL_STATE.md`.
+
 ## Матрица зависимостей между доменами
 
 | Изменение в | Влияет на | Что передаётся |
@@ -79,7 +90,8 @@
 - **Respondo** — публичный API ограничен `POST /add-contact`. Статусы ящиков/прогрева/статистика — только UI или Playwright. Ключ в `.secrets/respondo.env`.
 - **Bitrix24** — MCP-сервер (см. команды `bitrix24_*`), sync plan-fact.md при старте сессии.
 - **Coolify** — REST API, `.secrets/coolify.env` (`COOLIFY_URL=http://193.168.136.29:8000`). Подробности и UUID — в `../dev_unilist/CLAUDE.md`.
-- **Яндекс.Метрика** — счётчик `97774201`, OAuth-токен в `.secrets/yandex-metrika.env` (права `metrika:write`). Управление целями: `tools/yandex-metrika/create-goals.py` + `goals.json` (идемпотентно). Каталог событий лендинга: `marketing/analytics/yandex-metrika-events.md`.
+- **Яндекс.Метрика** — счётчик `97774201`, OAuth-токен в `.secrets/yandex-metrika.env` (права `metrika:write`). Управление целями: `tools/yandex-metrika/create-goals.py` + `goals.json` (идемпотентно). Каталог событий: `marketing/analytics/yandex-metrika-events.md`. **Один счётчик на лендинг и продукт** — для сквозной воронки. Префиксы целей: лендинг — `cta_*`/`nav_*`/`blog_*`, продукт — `app_*`. Identify юзеров в продукте — в `dev_unilist/frontend/components/providers/auth-provider.tsx` (login/register/restore-session).
+- **Яндекс.Вебмастер** — Webmaster API v4, креды `.secrets/yandex-webmaster.env` (`YWM_TOKEN`, `YWM_USER_ID=1995823460`, `YWM_HOST_ID=http:unilist.ru:80`). CLI: `tools/yandex-webmaster/wm.py` — команды `whoami | hosts | summary | queries | query-history | problems | links | sitemaps | recrawl | recrawl-quota`. На 2026-05-03 подтверждён только HTTP-хост; HTTPS-зеркало надо верифицировать через UI. Sitemap пустой → 0 страниц в индексе (см. `marketing/SEO/MEMORY.md`).
 
 ## Landing — деплой website_dev
 
