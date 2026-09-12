@@ -1,0 +1,9 @@
+# Idea #1 — global track
+redact before chatgpt
+anonymize text before chatgpt
+remove pii from text
+pii masking tool
+sanitize prompt
+chatgpt data privacy
+prevent employees pasting data into ai
+llm data leakage prevention

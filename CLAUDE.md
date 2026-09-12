@@ -17,7 +17,7 @@
 - `Nalog/`            — налоговая конфигурация ИП (УСН 1% Пермский край, ОКВЭД 62.01) + `tax-calendar-2026.md`
 - `referral/`         — реферальная программа: дизайн, экономика, manual playbook. Phase 1 (manual, вариант A) запущена 2026-04-26; Phase 2 (automated, B через credit ledger) — после ≥10 рефералов из Phase 1 или ≥20 платящих
 - `pet-projects/`     — побочные продукты вне Unilist: фильтр идей, пул идей, плейбук добычи из Reddit/HN/vc.ru. Лимит — 4 ч/нед, иначе продукт закрывается
-- `tools/`            — скрипты для внешних сервисов (Reg.ru API и т.п.). Секреты — в `.secrets/` (gitignored)
+- `tools/`            — скрипты для внешних сервисов (Reg.ru API, Я.Метрика, keyword-research). Секреты — в `.secrets/` (gitignored)
 
 ## Обязательные правила при каждой задаче
 
@@ -93,6 +93,7 @@
 - **Bitrix24** — MCP-сервер (см. команды `bitrix24_*`), sync plan-fact.md при старте сессии.
 - **Coolify** — REST API, `.secrets/coolify.env` (`COOLIFY_URL=http://193.168.136.29:8000`). Подробности и UUID — в `../dev_unilist/CLAUDE.md`.
 - **Яндекс.Метрика** — счётчик `97774201`, OAuth-токен в `.secrets/yandex-metrika.env` (права `metrika:write`). Управление целями: `tools/yandex-metrika/create-goals.py` + `goals.json` (идемпотентно). Каталог событий: `marketing/analytics/yandex-metrika-events.md`. **Один счётчик на лендинг и продукт** — для сквозной воронки. Префиксы целей: лендинг — `cta_*`/`nav_*`/`blog_*`, продукт — `app_*`. Identify юзеров в продукте — в `dev_unilist/frontend/components/providers/auth-provider.tsx` (login/register/restore-session).
+- **Вордстат / спрос** — `tools/keyword-research/`: `suggest.py` (реальные формулировки из подсказок Яндекса и Google, доступов не требует), `wordstat.py` (частотность; режим `--phrases` готовит фразы с операторами для ручной выгрузки, `--api` требует доступа и дозаполнения контракта), `score.py` (вердикт по кластерам). Доступ к частотности: API Вордстата (бета, по заявке в поддержку Директа) либо Wordstat в Yandex Cloud Search API. Креды — `.secrets/wordstat.env`. Метод и правила чтения — `pet-projects/demand-research.md`.
 - **Яндекс.Вебмастер** — Webmaster API v4, креды `.secrets/yandex-webmaster.env` (`YWM_TOKEN`, `YWM_USER_ID=1995823460`, `YWM_HOST_ID=http:unilist.ru:80`). CLI: `tools/yandex-webmaster/wm.py` — команды `whoami | hosts | summary | queries | query-history | problems | links | sitemaps | recrawl | recrawl-quota`. На 2026-05-03 подтверждён только HTTP-хост; HTTPS-зеркало надо верифицировать через UI. Sitemap пустой → 0 страниц в индексе (см. `marketing/SEO/MEMORY.md`).
 
 ## Landing — деплой website_dev
