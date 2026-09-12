@@ -16,6 +16,7 @@
 - `Strategy/`         — стратегические материалы
 - `Nalog/`            — налоговая конфигурация ИП (УСН 1% Пермский край, ОКВЭД 62.01) + `tax-calendar-2026.md`
 - `referral/`         — реферальная программа: дизайн, экономика, manual playbook. Phase 1 (manual, вариант A) запущена 2026-04-26; Phase 2 (automated, B через credit ledger) — после ≥10 рефералов из Phase 1 или ≥20 платящих
+- `pet-projects/`     — побочные продукты вне Unilist: фильтр идей, пул идей, плейбук добычи из Reddit/HN/vc.ru. Лимит — 4 ч/нед, иначе продукт закрывается
 - `tools/`            — скрипты для внешних сервисов (Reg.ru API и т.п.). Секреты — в `.secrets/` (gitignored)
 
 ## Обязательные правила при каждой задаче
@@ -56,6 +57,7 @@
 | dev | finance, ai-architecture | Инфраструктурные затраты, статистика использования AI |
 | marketing | content | Гипотезы каналов → темы статей |
 | content | marketing | Опубликованные статьи → эффективность каналов |
+| pet-projects | finance, legal | Отдельная статья затрат и выручки; дисклеймеры по регуляторным продуктам |
 | referral | finance, marketing, dev | Forgone revenue → unit-econ; оффер → продажи/onboarding; Phase 2 → credit ledger в продукте |
 
 ## Как работать с кодовой базой
