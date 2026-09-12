@@ -1,0 +1,9 @@
+# Idea #11 — outgoing file sanitizer, global track
+remove metadata from word document
+remove hidden data from document
+document metadata cleaner
+strip metadata before sending
+redact pdf properly
+tracked changes still visible after sending
+how to check document before sending client
+metadata scrubber law firm

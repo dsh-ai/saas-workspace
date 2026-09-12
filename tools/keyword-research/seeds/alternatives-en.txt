@@ -1,0 +1,8 @@
+# Класс запросов «конкурент» — самый ценный: спрос, доказанный чужой выручкой.
+# Заполнять именами, найденными на Product Hunt / Toolify (шаг 4 плейбука).
+# Шаблон: "<название> alternative", "<название> pricing", "<название> vs"
+dlp for chatgpt
+ai data loss prevention
+prompt security tool
+enterprise chatgpt privacy
+chatgpt alternative for sensitive data

@@ -75,14 +75,16 @@ def fetch(url: str) -> list[str]:
     return []
 
 
-def yandex(q: str, lang: str) -> list[str]:
+def yandex(q: str, lang: str, country: str = "") -> list[str]:
     return fetch("https://suggest.yandex.ru/suggest-ff.cgi?"
                  + parse.urlencode({"part": q, "uil": lang, "v": "4", "n": "10"}))
 
 
-def google(q: str, lang: str) -> list[str]:
-    return fetch("https://suggestqueries.google.com/complete/search?"
-                 + parse.urlencode({"client": "firefox", "hl": lang, "q": q}))
+def google(q: str, lang: str, country: str = "") -> list[str]:
+    params = {"client": "firefox", "hl": lang, "q": q}
+    if country:
+        params["gl"] = country  # страна меняет подсказки: us и gb дают разные списки
+    return fetch("https://suggestqueries.google.com/complete/search?" + parse.urlencode(params))
 
 
 def classify(phrase: str) -> str:
@@ -107,6 +109,8 @@ def main() -> None:
     ap.add_argument("seeds", nargs="+", help="файлы со стартовыми фразами (по одной в строке)")
     ap.add_argument("--engine", choices=["both", "yandex", "google"], default="both")
     ap.add_argument("--lang", default="ru", choices=["ru", "en"])
+    ap.add_argument("--country", default="",
+                    help="код страны для подсказок Google (us, gb, de…). Меняет выдачу")
     ap.add_argument("--expand", action="store_true",
                     help="добавить буквенное и вопросное расширение (дольше, но шире охват)")
     ap.add_argument("--delay", type=float, default=0.4, help="пауза между запросами, сек")
@@ -133,7 +137,7 @@ def main() -> None:
 
     for i, (seed, q) in enumerate(queries, 1):
         for name, fn in engines:
-            for phrase in fn(q, args.lang):
+            for phrase in fn(q, args.lang, args.country):
                 rec = found.setdefault(phrase.lower().strip(), {
                     "phrase": phrase.lower().strip(), "seed": seed,
                     "engines": set(), "intent": classify(phrase),
